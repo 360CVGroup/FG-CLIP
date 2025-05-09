@@ -104,6 +104,8 @@ caption_input = torch.tensor(tokenizer(captions, max_length=77, padding="max_len
 with torch.no_grad():
   image_feature = model.get_image_features(image_input)
   text_feature = model.get_text_features(caption_input,walk_short_pos=walk_short_pos)
+  image_feature = image_feature / image_feature.norm(p=2, dim=-1, keepdim=True)
+  text_feature = text_feature / text_feature.norm(p=2, dim=-1, keepdim=True)
 
 logits_per_image = image_feature @ text_feature.T 
 probs = logits_per_image.softmax(dim=1) 
@@ -132,6 +134,8 @@ with torch.no_grad():
     captions = ["white cat"]
     caption_input = torch.tensor(tokenizer(captions, max_length=77, padding="max_length", truncation=True).input_ids, dtype=torch.long, device=device)
     text_feature = model.get_text_features(caption_input,walk_short_pos=True)
+    text_feature = text_feature / text_feature.norm(p=2, dim=-1, keepdim=True)
+    dense_image_feature = dense_image_feature / dense_image_feature.norm(p=2, dim=-1, keepdim=True)
 
 similarity = dense_image_feature.squeeze() @ text_feature.squeeze().T
 similarity = similarity.cpu().numpy()
