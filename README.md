@@ -283,5 +283,6 @@ The content of this project itself is licensed under the [Apache license 2.0](./
 ## Related Projects
 This work wouldn't be possible without the incredible open-source code of these projects. Huge thanks!
 - [CLIPSelf](https://github.com/wusize/CLIPSelf.git)
+- [FineCLIP](https://github.com/Timsty1/FineCLIP)
 - [LLava](https://github.com/haotian-liu/LLaVA)
 - [LongCLIP](https://github.com/beichenzbc/Long-CLIP.git)
