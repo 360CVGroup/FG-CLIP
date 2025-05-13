@@ -16,7 +16,7 @@ Chunyu Xie*, Bin Wang*, Fanjing Kong, Jincheng Li, Dawei Liang, Gengshen Zhang, 
 </br>
 [![arXiv](https://img.shields.io/badge/arXiv-2505.05071-b31b1b.svg)](https://arxiv.org/abs/2505.05071)
 [![ICML](https://img.shields.io/badge/ICML-2025-blue.svg)](https://icml.cc/Conferences/2025)
-
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/360CVGroup/FG-CLIP)
  <p align="center">
   <img src="https://huggingface.co/qihoo360/fg-clip-large/resolve/main/radar_chart_methods.png"  width="500" height="440"/>
 </p>

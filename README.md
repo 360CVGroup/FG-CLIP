@@ -164,13 +164,17 @@ plt.savefig("FG-CLIP/use_imgs/FGCLIP_dfcolor_cat.png")
 ## Train
 
 ### Data Preparation
- [[Data: FgGRN-12M](data/data.md)]
 
+We develop a high-quality visual grounding dataset named [FgGRN-12M](https://huggingface.co/datasets/qihoo360/FgGRN-12M), featuring precise region-specific captions and challenging negative samples. We curate the overall dataset based on GRIT images. The process begins with generating detailed image captions using [CogVLM2-19B](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B), ensuring comprehensive and nuanced descriptions that capture the full context of each image. We then use [SpaCy](https://github.com/explosion/spaCy) to parse the captions and extract the referring expressions. Subsequently, the images and referring expressions are fed into the pretrained object detection model, i.e., [Yolo-World](https://github.com/AILab-CVC/YOLO-World) to obtain the associated bounding boxes. Non-maximum suppression is applied to eliminate overlapping bounding boxes, retaining only those with predicted confidence scores higher than 0.4. This process results in 12 million images and 40 million bounding boxes with fine-grained region captions.
+</br>
+For data preparation, please refer to: [[Data: FgGRN-12M](data/data.md)]
+
+
+### Ready for Training
 Our training and inference code is completely based on the transformers repository provided by huggingface, which is a very easy to use and easy to reproduce. We have provided the training script in the scripts directory.
 </br>
 [🤗 Transformers: State-of-the-art Machine Learning for Pytorch, TensorFlow, and JAX.](https://github.com/huggingface/transformers)
 </br>
-
 Our training script supports the use of zero2, tf32 acceleration, and bf16 precision (note that fp16 precision may cause gradient NAN). If you do not meet the above conditions, please turn off tf32 and replace deepspeed startup with torchrun.
 </br>
 ```Shell
