@@ -21,6 +21,7 @@ Chunyu Xie*, Bin Wang*, Fanjing Kong, Jincheng Li, Dawei Liang, Gengshen Zhang, 
 
 
 ## 🔥 News
+- 🚀 **[2025/05/13]** We have uploaded the dataset FgGRN-12M to 🤗(https://huggingface.co/datasets/qihoo360/FgGRN-12M)!
 - 🚀 **[2025/05/09]** We have uploaded the model to 🤗(https://huggingface.co/qihoo360/fg-clip-large), which supports quick and easy usage!
 - 🚀 **[2025/05/09]** We have updated the FG-CLIP github repository, and now you can test our models!
 - 🚀 **[2025/05/09]** We released the paper of [FG-CLIP: Fine-Grained Visual and Textual Alignment](https://arxiv.org/abs/2505.05071).

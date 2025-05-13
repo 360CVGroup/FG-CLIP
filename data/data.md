@@ -1,4 +1,4 @@
----
+<!-- ---
 tags:
 - Clip
 - Grounding
@@ -8,7 +8,7 @@ language:
 - en
 library_name: transformers
 pipeline_tag: zero-shot-image-classification
----
+--- -->
 # FG-CLIP: Fine-Grained Visual and Textual Alignment
 **[FG-CLIP: Fine-Grained Visual and Textual Alignment](https://arxiv.org/abs/2505.05071)** 
 </br>
