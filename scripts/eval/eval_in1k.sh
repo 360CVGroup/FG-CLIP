@@ -5,7 +5,7 @@ wholepath="qihoo360/fg-clip-base"
 image_folder="data/IN1K_val/val"
 map_idx_file="data/IN1K_val/imagenet2012_mapclsloc.txt"
 
-python -m myclip.eval.in_1K.eval_in1k \
+python -m fgclip.eval.in_1K.eval_in1k \
     --model-path $wholepath \
     --model-base $wholepath \
     --max_length 77 \

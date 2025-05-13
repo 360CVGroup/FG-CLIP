@@ -6,14 +6,15 @@ name="qihoo360/fg-clip-base"
 # resume from fgclip please set from_openai==False
 
 
-jsonfiles="fgclip-stage2-jsonfiles"
+jsonfiles="fgclip-grit-12m/jsonfiles"
+image_folder="data/grit-12m/"
 
 deepspeed fgclip/train/train_mem.py \
     --deepspeed ./scripts/zero2.json \
     --base_model $name \
     --model_name_or_path $name \
     --data_path $jsonfiles \
-    --image_folder /fgclip-stage2-data \
+    --image_folder $image_folder \
     --output_dir ./checkpoints/fgclip-stage2 \
     --train_use_word_size 8 \
     --add_box_loss True \
@@ -40,6 +41,6 @@ deepspeed fgclip/train/train_mem.py \
     --tf32 True \
     --gradient_checkpointing True \
     --dataloader_num_workers 8 \
-    --dataloader_pin_memory False \
+    --dataloader_pin_memory True \
     --lazy_preprocess True \
     --report_to "none" \

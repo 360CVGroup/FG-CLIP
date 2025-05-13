@@ -79,7 +79,7 @@ def eval_1k(model,image_processor,tokenizer,device,args):
                 walk_short_pos = False
 
 
-            text_feature = model.get_text_features(caption_input)
+            text_feature = model.get_text_features(caption_input,walk_short_pos=walk_short_pos)
             
             text_features.extend(text_feature)
             index+=1

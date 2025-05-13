@@ -163,7 +163,7 @@ plt.savefig("FG-CLIP/use_imgs/FGCLIP_dfcolor_cat.png")
 ## Train
 
 ### Data Preparation
-Comming Soon
+ [[Data: FgGRN-12M](data/data.md)]
 
 Our training and inference code is completely based on the transformers repository provided by huggingface, which is a very easy to use and easy to reproduce. We have provided the training script in the scripts directory.
 </br>
