@@ -109,9 +109,10 @@ with torch.no_grad():
   text_feature = text_feature / text_feature.norm(p=2, dim=-1, keepdim=True)
 
 logits_per_image = image_feature @ text_feature.T 
+logits_per_image = model.logit_scale.exp() * logits_per_image
 probs = logits_per_image.softmax(dim=1) 
 print(probs)
-
+# [[9.9997e-01, 3.3485e-05]]
 ```
 
 ### Dense feature effect display
