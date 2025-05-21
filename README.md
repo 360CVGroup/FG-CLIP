@@ -21,7 +21,7 @@ Chunyu Xie*, Bin Wang*, Fanjing Kong, Jincheng Li, Dawei Liang, Gengshen Zhang, 
 
 
 ## 🔥 News
-- 🚀 **[2025/05/13]** We have uploaded the dataset FgGRN-12M (Fine-Grained visual Grounding+Recaption+Negative) to 🤗(https://huggingface.co/datasets/qihoo360/FgGRN-12M)!
+- 🚀 **[2025/05/13]** We have uploaded the dataset FineHARD (Fine-Grained visual Grounding+Recaption+Negative) to 🤗(https://huggingface.co/datasets/qihoo360/FineHARD)!
 - 🚀 **[2025/05/09]** We have uploaded the model to 🤗(https://huggingface.co/qihoo360/fg-clip-large), which supports quick and easy usage!
 - 🚀 **[2025/05/09]** We have updated the FG-CLIP github repository, and now you can test our models!
 - 🚀 **[2025/05/09]** We released the paper of [FG-CLIP: Fine-Grained Visual and Textual Alignment](https://arxiv.org/abs/2505.05071).
@@ -166,9 +166,9 @@ plt.savefig("FG-CLIP/use_imgs/FGCLIP_dfcolor_cat.png")
 
 ### Data Preparation
 
-We develop a high-quality visual grounding dataset named [FgGRN-12M](https://huggingface.co/datasets/qihoo360/FgGRN-12M), featuring precise region-specific captions and challenging negative samples. We curate the overall dataset based on GRIT images. The process begins with generating detailed image captions using [CogVLM2-19B](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B), ensuring comprehensive and nuanced descriptions that capture the full context of each image. We then use [SpaCy](https://github.com/explosion/spaCy) to parse the captions and extract the referring expressions. Subsequently, the images and referring expressions are fed into the pretrained object detection model, i.e., [Yolo-World](https://github.com/AILab-CVC/YOLO-World) to obtain the associated bounding boxes. Non-maximum suppression is applied to eliminate overlapping bounding boxes, retaining only those with predicted confidence scores higher than 0.4. This process results in 12 million images and 40 million bounding boxes with fine-grained region captions.
+We develop a high-quality visual grounding dataset named [FineHARD](https://huggingface.co/datasets/qihoo360/FineHARD), featuring precise region-specific captions and challenging negative samples. We curate the overall dataset based on GRIT images. The process begins with generating detailed image captions using [CogVLM2-19B](https://huggingface.co/THUDM/cogvlm2-llama3-chat-19B), ensuring comprehensive and nuanced descriptions that capture the full context of each image. We then use [SpaCy](https://github.com/explosion/spaCy) to parse the captions and extract the referring expressions. Subsequently, the images and referring expressions are fed into the pretrained object detection model, i.e., [Yolo-World](https://github.com/AILab-CVC/YOLO-World) to obtain the associated bounding boxes. Non-maximum suppression is applied to eliminate overlapping bounding boxes, retaining only those with predicted confidence scores higher than 0.4. This process results in 12 million images and 40 million bounding boxes with fine-grained region captions.
 </br>
-For data preparation, please refer to: [[Data: FgGRN-12M](data/data.md)]
+For data preparation, please refer to: [[Data: FineHARD](data/data.md)]
 
 
 ### Ready for Training

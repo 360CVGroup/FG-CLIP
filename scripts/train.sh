@@ -6,7 +6,7 @@ name="qihoo360/fg-clip-base"
 # resume from fgclip please set from_openai==False
 
 
-jsonfiles="FgGRN-12M/jsonfiles"
+jsonfiles="FineHARD/jsonfiles"
 image_root="data/grit-12m/"
 
 deepspeed fgclip/train/train_mem.py \
