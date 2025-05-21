@@ -1,6 +1,6 @@
 # FG-CLIP: Fine-Grained Visual and Textual Alignment
 
-This repository is the official implementation of [FG-CLIP](https://github.com/360CVGroup/FG-CLIP).
+This repository is the official implementation of **FG-CLIP**, a new generation of text-image cross-modal model **excels in fine-grained discrimination and embedding.**
 
 **[FG-CLIP: Fine-Grained Visual and Textual Alignment](https://arxiv.org/abs/2505.05071)** 
 </br>
