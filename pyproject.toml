@@ -18,6 +18,7 @@ dependencies = [
     "uvicorn", "wandb", "deepspeed", "accelerate", "ftfy",
     "shortuuid", "httpx==0.24.0", "prefetch_generator",
     "transformers==4.41.0", "opencv-python==4.7.0.72", "ujson",
+    "peft==0.13.2",
 ]
 
 

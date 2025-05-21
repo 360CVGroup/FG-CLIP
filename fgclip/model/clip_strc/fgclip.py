@@ -189,7 +189,7 @@ class FGCLIPModel(CLIPModel):
         feature_map = feature_map.view(bs, h, w, -1).permute(0, 3, 1, 2)
         x_rois = roi_align(feature_map.type(torch.float32),box_info, (1, 1), 1.0, -1, True)[..., 0, 0]
 
-        x_rois = x_rois / x_rois.norm(p=2, dim=-1, keepdim=True)
+        # x_rois = x_rois / x_rois.norm(p=2, dim=-1, keepdim=True)
 
         return x_rois
 
@@ -538,9 +538,3 @@ class FGCLIPModel(CLIPModel):
         predict = logit_scale.exp() * torch.einsum('bp,bdp->bd', image_features_long, text_features_long)
         loss = F.cross_entropy(predict, labels)
         return loss
-
-
-
-
-
-

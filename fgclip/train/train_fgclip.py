@@ -124,6 +124,8 @@ class TrainingArguments(transformers.TrainingArguments):
     lora_weight_path: str = ""
     lora_bias: str = "none"
     from_openai: bool = field(default=False)
+    train_use_word_size: int = 8
+    text_model_lr: Optional[float] = None
 
 
 from datetime import datetime
@@ -201,6 +203,7 @@ class LazySupervisedBboxDataset(Dataset):
         caption_short = "a photo of "+item["short_caption"]        
 
         image_path = item["f_path"]
+        image_path = image_path.replace("grit-20m/data-12m/","")
         image_name = os.path.join(self.image_root,image_path)
         
         image = Image.open(image_name).convert("RGB")
@@ -237,13 +240,7 @@ class LazySupervisedBboxDataset(Dataset):
                 if box[0] > box[2] or box[1] > box[3]:
                     raise ValueError("Box coordinates are invalid.")
 
-                left = int(box[0] * width)
-                top = int(box[1] * height)
-                right = int(box[2] * width)
-                bottom = int(box[3] * height)
-
                 box_text = torch.tensor(self.tokenizer([box_caption], max_length=self.base_length, padding="max_length", truncation=True).input_ids, dtype=torch.long, device=image_tensor.device)        
-                box_images.append(box_image)
                 box_texts.append(box_text)
 
 
@@ -281,12 +278,7 @@ class LazySupervisedBboxDataset(Dataset):
 
                         hard_boxes[valid_hard] = box_tensor
                         valid_hard = valid_hard+1
-    
-                        left = int(box[0] * width)
-                        top = int(box[1] * height)
-                        right = int(box[2] * width)
-                        bottom = int(box[3] * height)
-   
+
 
             valid_hard = torch.tensor([valid_hard], device=image_tensor.device)
 
