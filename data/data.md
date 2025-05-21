@@ -40,7 +40,7 @@ Download the FG-CLIP model from this link. [🤗Vit-L@336px](https://huggingface
 Download the OpenAI CLIP model from this link. [🤗Vit-L@336px](https://huggingface.co/openai/clip-vit-large-patch14-336)
 
 
-### Step 2: Prepare FineHARD (Fine-Grained visual Grounding+Recaption+Negative) Dataset
+### Step 2: Prepare FineHARD (Fine-Grained Visual Grounding+Recaption+Hard Negative Dataset) Dataset
 
 First, pull the dataset from the following link.
 [🤗FineHARD](https://huggingface.co/datasets/qihoo360/FineHARD)，After downloading, unzip all compressed files, you will obtain the following file structure:
