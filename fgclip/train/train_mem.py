@@ -1,4 +1,4 @@
-from myclip.train.train_box_clip import train
+from fgclip.train.train_fgclip import train
 
 
 if __name__ == "__main__":
