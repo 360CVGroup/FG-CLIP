@@ -23,7 +23,7 @@ Chunyu Xie*, Bin Wang*, Fanjing Kong, Jincheng Li, Dawei Liang, Gengshen Zhang, 
 
 
 ## 🔥 News
-- 🚀 **[2025/05/13]** We have uploaded the dataset FineHARD (Fine-Grained Visual Grounding+Recaption+Hard Negative Dataset) to 🤗(https://huggingface.co/datasets/qihoo360/FineHARD)!
+- 🚀 **[2025/07/09]** We created two new demos for easy testing, for [fine-grained retrieval](https://huggingface.co/spaces/qihoo360/FG-CLIP-Retrieval-demo) and [dense feature display](https://huggingface.co/spaces/qihoo360/FG-CLIP-Densefeature-demo)
 - 🚀 **[2025/05/09]** We have uploaded the model to 🤗(https://huggingface.co/qihoo360/fg-clip-large), which supports quick and easy usage!
 - 🚀 **[2025/05/09]** We have updated the FG-CLIP github repository, and now you can test our models!
 - 🚀 **[2025/05/09]** We released the paper of [FG-CLIP: Fine-Grained Visual and Textual Alignment](https://arxiv.org/abs/2505.05071).
