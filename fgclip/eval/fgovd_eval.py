@@ -107,7 +107,7 @@ def eval_fg(model,image_processor,tokenizer,device,args):
             if args.max_length>100:
                 walk_short_pos = False
 
-            text_features,_ = model.get_text_features(caption_input,walk_short_pos=walk_short_pos)
+            text_features = model.get_text_features(caption_input,walk_short_pos=walk_short_pos)
             text_features = text_features / text_features.norm(p=2, dim=-1, keepdim=True)
             
             similarity = (100.0 * image_features @ text_features.T).softmax(dim=-1)
