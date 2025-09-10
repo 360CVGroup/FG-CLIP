@@ -8,5 +8,5 @@ python -m fgclip.eval.fgovd_eval \
     --model-path $wholepath \
     --model-base $wholepath \
     --max_length 77 \
-    --img_size 224 \
+    --image_size 224 \
     --image-folder $image_path \
