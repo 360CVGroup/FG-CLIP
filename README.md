@@ -25,7 +25,7 @@ Chunyu Xie*, Bin Wang*, Fanjing Kong, Jincheng Li, Dawei Liang, Gengshen Zhang, 
 
 
 ## 🔥 News
-- 🚀 **[2025/09/29]** We just open-sourced MCP server implentation for FG-CLIP, check [FGCLIP-MCP](https://github.com/360CVGroup/FGCLIP-MCP) for details.
+- 🚀 **[2025/09/29]** We just open-sourced MCP server implementation for FG-CLIP, check [FGCLIP-MCP](https://github.com/360CVGroup/FGCLIP-MCP) for details.
 - 🚀 **[2025/07/29]** We provide API access of FG-CLIP v2 base model, which out-performs FG-CLIP v1 by significant margin, check [research.360.cn](https://research.360.cn/sass/index) for details.
 - 🚀 **[2025/07/09]** We created two new demos for easy testing, for [fine-grained retrieval](https://huggingface.co/spaces/qihoo360/FG-CLIP-Retrieval-demo) and [dense feature display](https://huggingface.co/spaces/qihoo360/FG-CLIP-Densefeature-demo)
 - 🚀 **[2025/05/09]** We have uploaded the model to 🤗(https://huggingface.co/qihoo360/fg-clip-large), which supports quick and easy usage!
