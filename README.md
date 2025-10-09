@@ -272,14 +272,11 @@ We are seeking academic interns in the Multimodal field. If interested, please s
 If you find FG-CLIP useful for your research and applications, please cite using this BibTeX:
 
 ```
-@article{xie2025fgclip,
-      title={FG-CLIP: Fine-Grained Visual and Textual Alignment}, 
-      author={Chunyu Xie and Bin Wang and Fanjing Kong and Jincheng Li and Dawei Liang and Gengshen Zhang and Dawei Leng and Yuhui Yin},
-      year={2025},
-      eprint={2505.05071},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2505.05071}, 
+@article{xie2025fg,
+  title={FG-CLIP: Fine-Grained Visual and Textual Alignment},
+  author={Xie, Chunyu and Wang, Bin and Kong, Fanjing and Li, Jincheng and Liang, Dawei and Zhang, Gengshen and Leng, Dawei and Yin, Yuhui},
+  journal={arXiv preprint arXiv:2505.05071},
+  year={2025}
 }
 ```
 
