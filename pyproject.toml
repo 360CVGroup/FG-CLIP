@@ -3,22 +3,19 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "FG-CLIP"
+name = "fgclip2"
 version = "1.1.1"
 description = ""
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: Apache Software License",
 ]
 dependencies = [
-    "einops", "fastapi", "numpy",
-    "requests", "sentencepiece", "tokenizers>=0.12.1",
-    "uvicorn", "wandb", "deepspeed", "accelerate", "ftfy",
-    "shortuuid", "httpx==0.24.0", "prefetch_generator",
-    "transformers==4.41.0", "opencv-python==4.7.0.72", "ujson",
-    "peft==0.13.2",
+    "torch", "torchvision",
+    "transformers", "datasets", "accelerate",
+    "deepspeed", "wandb",
 ]
 
 

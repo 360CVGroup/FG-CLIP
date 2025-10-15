@@ -1,8 +1,11 @@
 [**中文说明**](README.md) | [**English**](README_en.md)
 
-# FG-CLIP 2: 中英双语视觉语言对齐模型
+# FG-CLIP 2: A Bilingual Fine-grained Vision-language Alignment Model
 
-本仓库是FG-CLIP及FG-CLIP 2的官方实现版本，作为新一代文本-图像跨模态模型，在细粒度理解方面表现卓越。FG-CLIP 2 支持中英双语，在 29 个数据集和 8 类多样化任务中，该模型超越包括SigLIP 2 和 MetaCLIP 2在内的强力基线模型，在两种语言任务中均取得目前的最佳性能。
+This repository is the official implementation of FG-CLIP and FG-CLIP 2, a new generation of text-image cross-modal model excels in fine-grained discrimination and embedding.
+
+FG-CLIP 2 is the foundation model for fine-grained vision-language understanding in both English and Chinese. 
+Across 29 datasets and 8 diverse tasks, it consistently surpasses recent strong baselines such as SigLIP 2 and MetaCLIP 2, achieving the best reported performance to date in both languages. 
 
 **[FG-CLIP 2: A Bilingual Fine-grained Vision-language Alignment Model](https://arxiv.org/abs/2510.10921)** 
 </br>
@@ -27,16 +30,16 @@ Chunyu Xie*, Bin Wang*, Fanjing Kong, Jincheng Li, Dawei Liang, Gengshen Zhang, 
   <img src="./use_imgs/FGCLIP2_compare_all_n.png"  width="500" height="440"/>
 </p>
 
-## 🔥 新闻
-- 🚀 **[2025/10/14]** 我们已上传FG-CLIP 2代码和模型权重
-- 🚀 **[2025/10/14]** 我们发布了论文 [FG-CLIP 2: A Bilingual Fine-grained Vision-language Alignment Model](https://arxiv.org/abs/2510.10921)
-- 🚀 **[2025/09/29]** 我们刚刚开源了FG-CLIP的MCP服务器实现, 更多细节请点击 [FGCLIP-MCP](https://github.com/360CVGroup/FGCLIP-MCP)
-- 🚀 **[2025/07/29]** 我们提供FG-CLIP 2 base模型的API访问，该模型在性能上显著优于FG-CLIP, 更多细节请查看 [research.360.cn](https://research.360.cn/sass/index)
-- 🚀 **[2025/07/09]** 我们创建了两个演示demo，分别针对 [fine-grained retrieval](https://huggingface.co/spaces/qihoo360/FG-CLIP-Retrieval-demo) 和 [dense feature display](https://huggingface.co/spaces/qihoo360/FG-CLIP-Densefeature-demo)
-- 🚀 **[2025/05/09]** 我们已将模型上传到 🤗(https://huggingface.co/qihoo360/fg-clip-large)，可以支持快捷使用！
-- 🚀 **[2025/05/09]** 我们已更新FG-CLIP github仓库，现在您可以测试我们的模型了！
-- 🚀 **[2025/05/09]** 我们发布了论文 [FG-CLIP: Fine-Grained Visual and Textual Alignment](https://arxiv.org/abs/2505.05071).
-- 🚀 **[2025/05/02]** FG-CLIP被ICML'25会议接收。
+## 🔥 News
+- 🚀 **[2025/10/14]** We have uploaded the FG-CLIP 2 code and models.
+- 🚀 **[2025/10/14]** We released the paper of [FG-CLIP 2: A Bilingual Fine-grained Vision-language Alignment Model](https://arxiv.org/abs/2510.10921).
+- 🚀 **[2025/09/29]** We just open-sourced MCP server implementation for FG-CLIP, check [FGCLIP-MCP](https://github.com/360CVGroup/FGCLIP-MCP) for details.
+- 🚀 **[2025/07/29]** We provide API access of FG-CLIP 2 base model, which out-performs FG-CLIP by significant margin, check [research.360.cn](https://research.360.cn/sass/index) for details.
+- 🚀 **[2025/07/09]** We created two new demos for easy testing, for [fine-grained retrieval](https://huggingface.co/spaces/qihoo360/FG-CLIP-Retrieval-demo) and [dense feature display](https://huggingface.co/spaces/qihoo360/FG-CLIP-Densefeature-demo).
+- 🚀 **[2025/05/09]** We have uploaded the model to 🤗(https://huggingface.co/qihoo360/fg-clip-large), which supports quick and easy usage!
+- 🚀 **[2025/05/09]** We have updated the FG-CLIP github repository, and now you can test our models!
+- 🚀 **[2025/05/09]** We released the paper of [FG-CLIP: Fine-Grained Visual and Textual Alignment](https://arxiv.org/abs/2505.05071).
+- 🚀 **[2025/05/02]** FG-CLIP has been accepted by ICML'25.
 
 
 <!-- ## Overview
@@ -59,46 +62,39 @@ Fine-grained vision-language understanding requires precise alignment between vi
 
 
 ## Contents
-- [模型架构](#模型架构)
-- [安装](#安装)
-- [模型仓库](#模型仓库)
-- [快速开始](#快速开始)
-- [训练](#训练)
-- [评测](#评测)
+- [Model Framework](#model-framework)
+- [Install](#install)
+- [Model Zoo](#model-zoo)
+- [Quick Start](#quick-start)
+- [Train](#train)
+- [Evaluation](#evaluation)
 
 
 
-## 模型架构
+## Model Framework
+Our approach employs a two-stage hierarchical learning framework that progressively enhances vision-language alignment from global semantics to fine-grained details.
 
-我们的方法采用一个两阶段分层学习框架，从全局语义到细粒度细节，逐步增强视觉-语言对齐能力。
+Stage 1: Global Semantic Alignment. We begin with large-scale image-text pairs, each annotated with both a short caption (for concise scene-level description) and a long caption (for rich contextual detail). Training on this bilingual corpus enables strong global alignment, establishing a robust foundation for cross-modal understanding in both English and Chinese.
 
-**第一阶段：全局语义对齐**  
-我们从大规模图像-文本对开始，每对数据均包含一个**短文本描述**（用于简洁的场景级描述）和一个**长文本描述**（用于丰富的上下文细节）。在此双语语料库上进行训练，可实现强大的全局对齐，为英文和中文的跨模态理解奠定坚实基础。
+Stage 2: Fine-Grained Visual-Language Learning. Building upon the globally aligned representation, we add region-level supervision and multiple fine-grained objectives to sharpen local correspondences. Specifically, this stage incorporates:
 
-**第二阶段：细粒度视觉-语言学习**  
-在全局对齐表示的基础上，我们引入区域级监督信号和多种细粒度目标，以强化局部对应关系。具体包括：
-
-- **细粒度视觉学习**：通过 RoIAlign 提取的区域特征与短语级描述进行区域-文本对齐。
-- **细粒度文本学习**：利用属性扰动生成的 hard negative 样本，区分细微的文本差异。
-- **带全局阈值同步的跨模态排序损失**：采用动态边距的排序损失，并通过全局同步的阈值实现稳定的 hard negative 挖掘。
-- **文本模态内对比损失**：在单一语言内部进行对比学习，以区分语义相近但不同的区域描述。
-
+- Fine-Grained Visual Learning: region–caption alignment via RoIAlign-extracted region features and phrase-level descriptions.
+- Fine-Grained Textual Learning: discrimination of subtle textual differences using hard negatives with perturbed attributes.
+- Cross-Modal Rank Loss with Global Threshold Synchronization: dynamic margin-based ranking with globally synchronized thresholds for stable hard negative mining.
+- Textual Intra-modal Contrastive Loss: intra-language contrastive learning to separate semantically similar but distinct region captions.
 <p align="center">
-  <img src="./use_imgs/framework.png" width="80%"/>
-</p>
+  <img src="./use_imgs/framework.png" width=80%/>
 
-## 安装
+## Install
 
-```shell
+```Shell
 conda create -n FGCLIP2 python=3.10 -y
 conda activate FGCLIP2
 cd FG-CLIP && pip install -e .
 ```
+## Model Zoo
 
-## 模型仓库
-
-
-|模型 |           视觉编码器           |                       模型权重                     |                           演示界面                           |
+|Models |           ViT           |                       Model Weights                      |                           Demo                           |
 |:-----------|:-----------------------:|:---------------------------------------------------------:|:--------------------------------------------------------:|
 | FG-CLIP-Base   | vit-base-patch16-224 | [🤗Huggingface](https://huggingface.co/qihoo360/fg-clip-base)  | [Retrieval](https://huggingface.co/spaces/qihoo360/FG-CLIP-Retrieval-demo) & [Dense Feature](https://huggingface.co/spaces/qihoo360/FG-CLIP-Densefeature-demo) |
 |  FG-CLIP-Large   | vit-large-patch14-336 | 🤗[Huggingface](https://huggingface.co/qihoo360/fg-clip-large)  |  |
@@ -106,18 +102,18 @@ cd FG-CLIP && pip install -e .
 |  FG-CLIP2-Large   | vit-large-patch16 | [🤗Huggingface](https://huggingface.co/qihoo360/fg-clip2-large)  |  |
 |  FG-CLIP2-So400m   | vit-so400m-patch16 | [🤗Huggingface](https://huggingface.co/qihoo360/fg-clip2-so400m)  |  |
 
-## 评测基准
+## Benchmark
 
-|数据集 |          链接          | 
+|Datasets |          Link          | 
 |:-----------|:-----------------------:|
 | LIT-CN   | [🤗https://huggingface.co/datasets/qihoo360/LIT-CN](https://huggingface.co/datasets/qihoo360/LIT-CN)  | 
 |  DCI-CN   |  🤗[https://huggingface.co/datasets/qihoo360/DCI-CN](https://huggingface.co/datasets/qihoo360/DCI-CN)  | 
 | DOCCI-CN   |  [🤗https://huggingface.co/datasets/qihoo360/DOCCI-CN](https://huggingface.co/datasets/qihoo360/DOCCI-CN)  |
 |  BoxClass-CN   |  [🤗https://huggingface.co/datasets/qihoo360/BoxClass-CN](https://huggingface.co/datasets/qihoo360/BoxClass-CN)  | 
 
-## 快速开始 🤗
+## Quick Start 🤗
 
-### 加载模型
+### Load Model
 ```Shell
 import torch
 from PIL import Image
@@ -139,7 +135,7 @@ image_processor = AutoImageProcessor.from_pretrained(model_root)
 ```
 
 
-### 检索
+### Retrieval
 
 ```Shell
 def determine_max_value(image):
@@ -165,10 +161,10 @@ image_input = image_processor(images=image, max_num_patches=determine_max_value(
 # NOTE Long captions: max_length=196 walk_type="long"
 
 captions = [
-"一个简约风格的卧室角落，黑色金属衣架上挂着多件米色和白色的衣物，下方架子放着两双浅色鞋子，旁边是一盆绿植，左侧可见一张铺有白色床单和灰色枕头的床。",
-"一个简约风格的卧室角落，黑色金属衣架上挂着多件红色和蓝色的衣物，下方架子放着两双黑色高跟鞋，旁边是一盆绿植，左侧可见一张铺有白色床单和灰色枕头的床。",
-"一个简约风格的卧室角落，黑色金属衣架上挂着多件米色和白色的衣物，下方架子放着两双运动鞋，旁边是一盆仙人掌，左侧可见一张铺有白色床单和灰色枕头的床。",
-"一个繁忙的街头市场，摊位上摆满水果，背景是高楼大厦，人们在喧闹中购物。"
+"A minimalist-style bedroom corner with a black metal clothing rack holding several beige and white garments, two pairs of light-colored shoes on the shelf below, a potted green plant nearby, and to the left, a bed made with white sheets and gray pillows.",
+"A minimalist-style bedroom corner with a black metal clothing rack holding several red and blue garments, two pairs of black high heels on the shelf below, a potted green plant nearby, and to the left, a bed made with white sheets and gray pillows.",
+"A minimalist-style bedroom corner with a black metal clothing rack holding several beige and white garments, two pairs of sneakers on the shelf below, a potted cactus nearby, and to the left, a bed made with white sheets and gray pillows.",
+"A bustling street market with fruit-filled stalls, skyscrapers in the background, and people shopping amid the noise and activity."
 ]
 captions = [caption.lower() for caption in captions]
 
@@ -177,19 +173,20 @@ caption_input = tokenizer(captions, padding="max_length", max_length=196, trunca
 
 with torch.no_grad():
   image_feature = model.get_image_features(**image_input)
-  text_feature = model.get_text_features(**caption_input,walk_type="long")
+  text_feature = model.get_text_features(**caption_input)
   image_feature = image_feature / image_feature.norm(p=2, dim=-1, keepdim=True)
   text_feature = text_feature / text_feature.norm(p=2, dim=-1, keepdim=True)
 
 logits_per_image = image_feature @ text_feature.T
 logit_scale, logit_bias = model.logit_scale.to(text_feature.device), model.logit_bias.to(text_feature.device)
 logits_per_image = logits_per_image * logit_scale.exp() + logit_bias
+
 ```
  <p align="left">
-  <img src="use_imgs\cn_re_demo.png" width=100%/>
+  <img src="use_imgs\en_re_demo.png" width=100%/>
 </p>
 
-### 密集特征效果展示
+### Dense feature effect display
 
 ```Shell
 
@@ -266,50 +263,45 @@ plt.close()
   <img src="use_imgs\FGCLIP2_dfcolor_cat_all_2K.png" width=100%/>
 </p>
 
-## 训练
+## Train
 
-### 数据准备
+### Data Preparation
 
-我们提供使用 [🤗FineHARD dataset](https://huggingface.co/datasets/qihoo360/FineHARD) 进行第二阶段训练的代码。FineHARD 数据集包含1200万张图像、4000万个带有细粒度区域描述的边界框，以及1000万个hard negative样本。
+We provide code for the second stage training using the [🤗FineHARD dataset](https://huggingface.co/datasets/qihoo360/FineHARD). FineHARD dataset includes 12 million images, 40 million bounding boxes with fine-grained region descriptions, and 10 million hard negative samples.
+</br>
+For data preparation, please refer to [Data: FineHARD](data/data.md)
 
-关于数据准备，请参考 [Data: FineHARD](data/data.md)
 
-
-### 准备训练
-我们的训练和推理代码完全基于 Hugging Face 提供的 transformers 仓库，非常易于使用和复现。我们在 scripts 目录中提供了训练脚本。
+### Ready for Training
+Our training and inference code is completely based on the transformers repository provided by huggingface, which is a very easy to use and easy to reproduce. We have provided the training script in the scripts directory.
 </br>
 [🤗 Transformers: State-of-the-art Machine Learning for Pytorch, TensorFlow, and JAX.](https://github.com/huggingface/transformers)
 </br>
-我们的训练脚本支持 zero2、tf32 加速和 bf16 精度（注意 fp16 精度可能导致梯度 NAN）。如果您不满足上述条件，请关闭 tf32 并使用 torchrun 替代 deepspeed 启动。
+Our training script supports the use of zero2, tf32 acceleration, and bf16 precision (note that fp16 precision may cause gradient NAN). If you do not meet the above conditions, please turn off tf32 and replace deepspeed startup with torchrun.
 </br>
 ```Shell
 bash scripts/train/stage2_fgclip2.sh
 ```
 
 
-## 评测
-### 数据准备
-从以下链接下载 share-captioner_coco_lcs_sam_1246k_1107.json 
+## Evaluation
+### Data Preparation
+Download the share-captioner_coco_lcs_sam_1246k_1107.json from the following link 
 https://huggingface.co/datasets/Lin-Chen/ShareGPT4V/blob/main/share-captioner_coco_lcs_sam_1246k_1107.json
 
-从以下链接下载 CocoCaptions 并放入 data/coco/annotations/
-
+Download the CocoCaptions from the following link nd put them into data/coco/annotations/
 https://github.com/tylin/coco-caption
 
-从以下链接下载 COCO 并放入 data/coco
-
+Download the COCO from the following link and put them into data/coco
 https://cocodataset.org/dataset
 
-DCI 的描述来自以下链接并放入 data/densely_captioned_images
-
+Captions of DCI are from the following links and put them into data/densely_captioned_images
 https://github.com/facebookresearch/DCI
 
-ImageNet-1K 来自以下链接并放入 data/IN1K_val
-
+ImageNet-1K from from the following links and put them into data/IN1K_val
 https://image-net.org/
 
-ImageNet-v2 来自以下链接并放入 data/imagenetv2-matched-frequency-format-val
-
+ImageNet-v2 from the following links and put them into data/imagenetv2-matched-frequency-format-val
 https://opendatalab.com/OpenDataLab/ImageNetV2/tree/main
 
 
@@ -321,10 +313,10 @@ bash scripts/eval/eval.sh
 
 
 <!-- ## Acknowledgement -->
-## 招聘中
-我们正在招募多模态方向的学术实习生。如有兴趣，请将简历发送至 xiechunyu@360.cn.
-## 引用
-如果您在研究或应用中发现 FG-CLIP 2 对您有所帮助，请使用以下 BibTeX 引用：
+## We Are Hiring
+We are seeking academic interns in the Multimodal field. If interested, please send your resume to xiechunyu@360.cn.
+## Citation
+If you find FG-CLIP 2 useful for your research and applications, please cite using this BibTeX:
 
 ```
 @article{xie2025fg2,
@@ -342,3 +334,19 @@ bash scripts/eval/eval.sh
   year={2025}
 }
 ```
+
+
+
+
+
+## License
+
+This project utilizes certain datasets and checkpoints that are subject to their respective original licenses. Users must comply with all terms and conditions of these original licenses.
+The content of this project itself is licensed under the [Apache license 2.0](./LICENSE).
+
+## Related Projects
+This work wouldn't be possible without the incredible open-source code of these projects. Huge thanks!
+- [CLIPSelf](https://github.com/wusize/CLIPSelf.git)
+- [FineCLIP](https://github.com/Timsty1/FineCLIP)
+- [LLava](https://github.com/haotian-liu/LLaVA)
+- [LongCLIP](https://github.com/beichenzbc/Long-CLIP.git)

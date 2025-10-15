@@ -9,35 +9,12 @@ language:
 library_name: transformers
 pipeline_tag: zero-shot-image-classification
 --- -->
-# FG-CLIP: Fine-Grained Visual and Textual Alignment
-**[FG-CLIP: Fine-Grained Visual and Textual Alignment](https://arxiv.org/abs/2505.05071)** 
-</br>
-Chunyu Xie*, Bin Wang*, Fanjing Kong, Jincheng Li, Dawei Liang, Gengshen Zhang, Dawei Leng†, Yuhui Yin(*Equal Contribution, ✝Corresponding Author)
-</br>
-[![arXiv](https://img.shields.io/badge/arXiv-2505.05071-b31b1b.svg)](https://arxiv.org/abs/2505.05071)
-[![ICML](https://img.shields.io/badge/ICML-2025-blue.svg)](https://icml.cc/Conferences/2025)
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/360CVGroup/FG-CLIP)
- <p align="center">
-  <img src="https://huggingface.co/qihoo360/fg-clip-large/resolve/main/radar_chart_methods.png"  width="500" height="440"/>
-</p>
-
-## Model Framework
-FG-CLIP’s training proceeds in two stages: the first stage leverages
-global-level caption-image pairs to achieve initial fine-grained alignment, while the second stage supplements these with additional
-region-level captions, including detailed region captions and positive/negative region descriptions to further refine the alignment.
-<p align="center">
-  <img src="https://huggingface.co/qihoo360/fg-clip-large/resolve/main/fgclip_strc.png" width=80%/>
-</p>
-
-
-
 # Data Preparation
-To run the training code for FG-CLIP, please follow the following step.
+To run the training code for FG-CLIP 2, please follow the following step.
 
 ### Step 1: Download the model
 
-Download the FG-CLIP model from this link. [🤗Vit-L@336px](https://huggingface.co/qihoo360/fg-clip-large) or
-Download the OpenAI CLIP model from this link. [🤗Vit-L@336px](https://huggingface.co/openai/clip-vit-large-patch14-336)
+Download the FG-CLIP 2 model from this link. [🤗Vit-L@336px](https://huggingface.co/qihoo360/fg-clip-large)
 
 
 ### Step 2: Prepare FineHARD (Fine-Grained Visual Grounding+Recaption+Hard Negative Dataset) Dataset
