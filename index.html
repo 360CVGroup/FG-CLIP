@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="Visual Instruction Tuning" name="description"/>
+  <meta content="multimodal chatbot" name="keywords"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+    FG-CLIP 2
+  </title>
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css" rel="stylesheet"/>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
+  <link href="./static/css/index.css" rel="stylesheet"/>
+  <link href="https://cdn-icons-png.flaticon.com/512/954/954591.png" rel="icon"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+  </script>
+  
+  <script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js">
+  </script>
+  <script src="https://gradio.s3-us-west-2.amazonaws.com/4.16.0/gradio.js" type="module">
+  </script>
+ </head>
+ <style>
+  .expandable-card .card-text-container {
+    max-height: 200px;
+    overflow-y: hidden;
+    position: relative;
+  }
+
+  .expandable-card.expanded .card-text-container {
+    max-height: none;
+  }
+
+  .expand-btn {
+    position: relative;
+    display: none;
+    background-color: rgba(255, 255, 255, 0.8);
+    /* margin-top: -20px; */
+    /* justify-content: center; */
+    color: #510c75;
+    border-color: transparent;
+  }
+
+  .expand-btn:hover {
+    background-color: rgba(200, 200, 200, 0.8);
+    text-decoration: none;
+    border-color: transparent;
+    color: #510c75;
+  }
+
+  .expand-btn:focus {
+    outline: none;
+    text-decoration: none;
+  }
+
+  .expandable-card:not(.expanded) .card-text-container:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 90px;
+    background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 1));
+  }
+
+  .expandable-card:not(.expanded) .expand-btn {
+    margin-top: -40px;
+  }
+
+  .card-body {
+    padding-bottom: 5px;
+  }
+
+  .vertical-flex-layout {
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .figure-img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .adjustable-font-size {
+    font-size: calc(0.5rem + 2vw);
+  }
+
+  .chat-history {
+    flex-grow: 1;
+    overflow-y: auto;
+    /* overflow-x: hidden; */
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+  }
+
+  #gradio pre {
+    background-color: transparent;
+  }
+ </style>
+ <body>
+  <section class="hero">
+   <div class="hero-body">
+    <div class="container is-max-desktop">
+     <div class="columns is-centered">
+      <div class="column has-text-centered">
+       <h1 class="title is-2">
+        <strong>
+         <font color="#971ecb">
+          FG-CLIP 2:
+         </font>
+         A Bilingual Fine-grained Vision-language Alignment Model
+        </strong>
+       </h1>
+       <!-- <h5 class="subtitle is-5 publication-awards">ICLR 2026 </h5> -->
+       <div class="is-size-5 publication-authors">
+        <span class="author-block">
+         <a style="color:#f68946;font-weight:normal;">
+          Chunyu Xie
+          <sup>
+           *
+          </sup>
+         </a>
+         ,
+        </span>
+        <span class="author-block">
+         <a style="color:#971ecb;font-weight:normal;">
+          Bin Wang
+          <sup>
+           *
+          </sup>
+         </a>
+         ,
+        </span>
+        <span class="author-block">
+         <a style="color:#F2A900;font-weight:normal;">
+          Fanjing Kong
+         </a>
+         ,
+        </span>
+        <span class="author-block">
+         <a style="color:#f68946;font-weight:normal;">
+          Jincheng Li
+         </a>
+         ,
+        </span>
+        <span class="author-block">
+         <a style="color:#f68946;font-weight:normal;">
+          Dawei Liang
+         </a>
+         ,
+        </span>
+        <span class="author-block">
+         <a style="color:#f68946;font-weight:normal;">
+          Ji Ao
+         </a>
+         ,
+        </span>
+        <span class="author-block">
+         <a style="color:#f68946;font-weight:normal;">
+          Dawei Leng
+          <sup>
+           †
+          </sup>
+         </a>
+         ,
+        </span>
+        <span class="author-block">
+         <a style="color:#f68946;font-weight:normal;">
+          Yuhui Yin
+         </a>
+         ,
+        </span>
+       </div>
+       <div class="is-size-5 publication-authors">
+        <span class="author-block">
+         <b style="color:#0eb82a; font-weight:normal">
+          ▶
+         </b>
+         360 AI Research
+        </span>
+       </div>
+       <div class="is-size-6 publication-authors">
+        <span class="author-block">
+         <sup>
+          *
+         </sup>
+         Equal Contribution
+         <sup>
+          †
+         </sup>
+         Corresponding Author
+        </span>
+       </div>
+       <!-- <div class="column has-text-centered">
+            <h3 class="title is-3 publication-title">Improved Baselines with Visual Instruction Fine-tuning</h3>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://hliu.cc/" style="color:#f68946;font-weight:normal;">Haotian Liu<sup>*</sup></a>,
+              </span>
+              <span class="author-block">
+                <a href="https://chunyuan.li/" style="color:#008AD7;font-weight:normal;">Chunyuan Li<sup>*</sup></a>,
+              </span>
+              <span class="author-block">
+                <a href="https://yuheng-li.github.io" style="color:#008AD7;font-weight:normal;">Yuheng Li</a>,
+              </span>
+              <span class="author-block">
+                <a href="https://pages.cs.wisc.edu/~yongjaelee/" style="color:#f68946;font-weight:normal;">Yong Jae
+                  Lee</a>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><b style="color:#f68946; font-weight:normal">&#x25B6 </b> University of
+                Wisconsin-Madison</b></span>
+              <span class="author-block"><b style="color:#008AD7; font-weight:normal">&#x25B6 </b> Microsoft Research</span>
+            </div> -->
+       <div class="column has-text-centered">
+        <div class="publication-links">
+         <span class="link-block">
+          <a class="external-link button is-normal is-rounded is-dark" href="https://arxiv.org/abs/2510.10921" target="_blank">
+           <span class="icon">
+            <i class="ai ai-arxiv">
+            </i>
+           </span>
+           <span>
+            arXiv
+           </span>
+          </a>
+         </span>
+         <span class="link-block">
+          <a class="external-link button is-normal is-rounded is-dark" href="https://github.com/360CVGroup/FG-CLIP" target="_blank">
+           <span class="icon">
+            <i class="fab fa-github">
+            </i>
+           </span>
+           <span>
+            Code
+           </span>
+          </a>
+         </span>
+         <span class="link-block">
+          <a class="external-link button is-normal is-rounded is-dark" href="https://github.com/360CVGroup/FG-CLIP?tab=readme-ov-file#model-zoo" target="_blank">
+           <span class="icon">
+            <i class="fas fa-share-square">
+            </i>
+           </span>
+           <span>
+            Model
+           </span>
+          </a>
+         </span>
+
+        <span class="link-block">
+          <a class="external-link button is-normal is-rounded is-dark" href="https://huggingface.co/collections/qihoo360/fg-clip-2-68ecbf9c548623bb78bc7913" target="_blank">
+           <span class="icon">
+            <i class="fas fa-database">
+            </i>
+           </span>
+           <span>
+            Dataset
+           </span>
+          </a>
+         </span>
+         <span class="link-block">
+          <a class="external-link button is-normal is-rounded is-dark" href="https://huggingface.co/spaces/qihoo360/FG-CLIP2-Retrieval-demo" target="_blank">
+           <span class="icon">
+            <i class="far fa-images">
+            </i>
+           </span>
+           <span>
+            Demo
+           </span>
+          </a>
+         </span>
+
+          <span class="link-block">
+            <a class="external-link button is-normal is-rounded is-dark" href="https://research.360.cn/sass/fg-clip/fg-clipDocument" target="_blank">
+              <span class="icon">
+                <i class="fas fa-server"></i>
+              </span>
+              <span>
+                Service
+              </span>
+            </a>
+          </span>
+         <!-- <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                  </a>
+              </span> -->
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+  <section class="hero teaser">
+   <div class="container is-max-desktop">
+    <div class="hero-body">
+     <h4 class="subtitle has-text-centered">
+      🔥
+      <span style="color: #ff3860">
+       [NEW!]
+      </span>
+      FG-CLIP 2 is the foundation model for fine-grained vision-language understanding in both English and Chinese. 
+      Across 29 datasets and 8 diverse tasks, it consistently surpasses recent strong baselines such as SigLIP 2 and MetaCLIP 2, achieving the best reported performance to date in both languages. 
+  <centering>
+    <div style="text-align: center;">
+    <img id="teaser" src="images/FGCLIP2_compare_all.png" width="70%"/>
+    </div>
+  </centering>
+     </h4>
+    </div>
+   </div>
+  </c>
+  <!--<section class="section" style="background-color:#efeff081">
+   <div class="container is-max-desktop" id="gradio">
+    <gradio-app src="https://llava.hliu.cc">
+    </gradio-app>
+   </div>
+  </section>-->
+  <!-- <hr> -->
+
+  <section class="section" style="background-color:#efeff081;margin-top: -1rem">
+
+   <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+     <div class="column is-six-fifths">
+      <h2 class="title is-3">
+       Abstract
+      </h2>
+      <div class="content has-text-justified">
+       <p>
+        Fine-grained vision-language understanding requires precise alignment between visual content and linguistic descriptions, a capability that remains limited in current models, particularly in non-English settings. While models like CLIP perform well on global alignment, they often struggle to capture fine-grained details in object attributes, spatial relations, and linguistic expressions, with limited support for bilingual comprehension. To address these challenges, we introduce FG-CLIP 2, a bilingual vision-language model designed to advance fine-grained alignment for both English and Chinese. The key ingredients of FG-CLIP 2 are summarized below.
+        <ol type="1">
+         <li>
+          <b>
+          Rich Fine-Grained Supervision</b>.
+          <span style="font-size: 95%;">
+            Including region-text matching and long-caption modeling, alongside multiple discriminative objectives. We further introduce the Textual Intra-modal Contrastive (TIC) loss to better distinguish semantically similar captions.
+          </span>
+         </li>
+         <li>
+          <b>Bilingual Multimodal Data</b>. 
+          <span style="font-size: 95%;">
+            Trained on a carefully curated mixture of large-scale English and Chinese data, FG-CLIP 2 achieves powerful bilingual performance.
+          </span>
+         </li>
+         <li>
+          <b>
+          Performance</b>.
+          <span style="font-size: 95%;">
+            Extensive experiments on 29 datasets across 8 tasks show that FG-CLIP 2 outperforms existing methods, achieving state-of-the-art results in both languages.
+          </span>
+         </li>
+         <li>
+          <b>Chinese Multimodal Benchmark</b>.
+          <span style="font-size: 95%;">
+            To enable rigorous evaluation, we present a new benchmark for Chinese multimodal understanding, featuring long-caption retrieval and bounding box classification.
+          </span>
+         </li>
+        </ol>
+       </p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+  <!-- <br> -->
+
+  <section class="section">
+   <!-- Results. -->
+   <div class="columns is-centered has-text-centered">
+    <div class="column is-six-fifths">
+     <h2 class="title is-3">
+      <img id="painting_icon" src="https://cdn-icons-png.flaticon.com/512/5379/5379860.png" width="3%"/>
+      Rich Fine-Grained Supervision
+     </h2>
+    </div>
+   </div>
+   <!-- </div> -->
+   <!--/ Results. -->
+   <div class="container is-max-desktop">
+    <div class="columns is-centered">
+     <div class="column is-full-width">
+      <div class="content has-text-justified">
+       <p>
+          Our approach employs a two-stage hierarchical learning framework that 
+          progressively enhances vision-language alignment from global semantics to fine-grained details.
+        <ul type="1">
+         <li>
+          <b>
+           Stage 1: Global Semantic Alignment.
+          </b>
+          <span style="font-size: 95%;">
+           We begin with large-scale image-text pairs, each annotated with both a short caption (for concise scene-level description) and 
+           a long caption (for rich contextual detail). Training on this bilingual corpus enables strong global alignment, establishing a robust foundation for cross-modal understanding in both English and Chinese.
+          </span>
+         </li>
+         <li>
+          <b>
+           Stage 2: Fine-Grained Visual-Language Learning.
+          </b>
+          <span style="font-size: 95%;">
+              Building upon the globally aligned representation, we add region-level supervision and multiple fine-grained 
+              objectives to sharpen local correspondences. Specifically, this stage incorporates:
+<br>
+&nbsp;&nbsp;– <strong>Fine-Grained Visual Learning</strong>: region–caption alignment via RoIAlign-extracted region features and phrase-level descriptions.<br>
+&nbsp;&nbsp;– <strong>Fine-Grained Textual Learning</strong>: discrimination of subtle textual differences using hard negatives with perturbed attributes.<br>
+&nbsp;&nbsp;– <strong>Cross-Modal Rank Loss with Global Threshold Synchronization</strong>: dynamic margin-based ranking with globally synchronized thresholds for stable hard negative mining.<br>
+&nbsp;&nbsp;– <strong>Textual Intra-modal Contrastive Loss</strong>: intra-language contrastive learning to separate semantically similar but distinct region captions. 
+          </span>
+         </li>
+        </ul>
+       </p>
+             <centering>
+       <div style="text-align: center;">
+        <img id="teaser" src="images/framework.png" width="80%"/>
+       </div>
+      </centering>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+<section class="section" style="background-color:#efeff081;margin-top: -1rem">
+   <!-- Results. -->
+   <div class="columns is-centered has-text-centered">
+    <div class="column is-six-fifths">
+     <h2 class="title is-3">
+      <img id="painting_icon" src="https://cdn-icons-png.flaticon.com/512/5886/5886212.png" width="3%"/>
+      Bilingual Multimodal Data
+     </h2>
+    </div>
+   </div>
+   <!-- </div> -->
+   <!--/ Results. -->
+   <div class="container is-max-desktop">
+    <div class="columns is-centered">
+     <div class="column is-full-width">
+      <div class="content has-text-justified">
+       <p>
+          In the first stage, we train on image-text pairs from diverse sources. For English, we adopt an enhanced version
+          of the LAION-2B dataset, where we augment the original short captions with
+          detailed long captions generated by LMMs. For Chinese, we combine three datasets: Wukong (100
+          million pairs), Zero (250 million pairs), and a large-scale in-house dataset (500 million pairs). 
+          In the second stage, we extend training with fine-grained region-text pairs to further improve spatial
+          grounding. For English, we use the FineHARD dataset, which includes 12 million images, 40 million bounding boxes with fine-grained region descriptions, and 10 million hard negative
+          samples. For Chinese, we use an in-house dataset containing 12 million images.
+          <br>
+          <br>
+          <u>Zero dataset</u>: <a href="https://github.com/yuxie11/R2D2" target="_blank" class="highlighted-link">https://github.com/yuxie11/R2D2</a> 
+          <br>     
+          <u>FineHARD dataset</u>: <a href="https://huggingface.co/datasets/qihoo360/FineHARD" target="_blank" class="highlighted-link">https://huggingface.co/datasets/qihoo360/FineHARD</a>
+          <!-- CSS Code: Place this code in the document's head (between the 'head' tags) -->
+        <style>
+         table.GeneratedTable {
+    width: 100%;
+    background-color: #ffffff;
+    border-collapse: collapse;
+    border-width: 2px;
+    border-color: #c1c4c5;
+    border-style: solid;
+    color: #000000;
+  }
+  
+  table.GeneratedTable td, table.GeneratedTable th {
+    border-width: 2px;
+    border-color: #9b9d9e;
+    border-style: solid;
+    padding: 3px;
+  }
+  
+  table.GeneratedTable thead {
+    background-color: #6691ee;
+  }
+        </style>
+        <!-- <div>
+          <p style="text-align: center;">
+           <img src="images/data.png"/>
+          </p>
+        </div> -->
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+  <section class="section" style="margin-top: -1rem">
+      <!-- Results. -->
+      <div class="columns is-centered has-text-centered">
+       <div class="column is-six-fifths">
+        <h2 class="title is-3">
+         <img id="painting_icon" src="https://cdn-icons-png.flaticon.com/512/5379/5379860.png" width="3%"/>
+         Performance
+        </h2>
+       </div>
+      </div>
+      <!-- </div> -->
+      <!--/ Results. -->
+      <div class="container is-max-desktop">
+       <div class="columns is-centered">
+        <div class="column is-full-width">
+         <div class="content has-text-justified">
+          <p>
+              FG-CLIP 2 achieves superior performance across 29 datasets and 8 tasks, including fine-grained understanding, bounding box classification,
+               open-vocabulary object detection, long and short caption image-text retrieval, zero-shot image classification, open-vocabulary segmentation, 
+               and large multimodal model (LMM) tasks, demonstrating strong bilingual generalization in both English and Chinese. Detailed results are reported in the following tables.
+          </p>
+
+          <div class="columns is-multiline is-centered">
+            <div class="column is-half">
+              <div class="has-text-centered">
+                <img src="images/table1.png" class="table-image" style="width: 100%; max-width: 700px;" />
+              </div>
+            </div>
+            <div class="column is-half">
+              <div class="has-text-centered">
+                <img src="images/table2.png" class="table-image" style="width: 100%; max-width: 700px;" />
+              </div>
+            </div>
+            <div class="column is-half">
+              <div class="has-text-centered">
+                <img src="images/table3.png" class="table-image" style="width: 100%; max-width: 700px;" />
+              </div>
+            </div>
+            <div class="column is-half">
+              <div class="has-text-centered">
+                <img src="images/table4.png" class="table-image" style="width: 100%; max-width: 700px;" />
+              </div>
+            </div>
+            <div class="column is-half">
+              <div class="has-text-centered">
+                <img src="images/table5.png" class="table-image" style="width: 100%; max-width: 700px;" />
+              </div>
+            </div>
+            <div class="column is-half">
+              <div class="has-text-centered">
+                <img src="images/table6.png" class="table-image" style="width: 100%; max-width: 700px;" />
+              </div>
+            </div>
+          </div>
+          <p>
+               We present the alignment capability of FG-CLIP 2 between dense visual features and text in both Chinese and English contexts. The results are shown in the following figure,
+                where warmer colors indicate higher similarity between image regions and the matched text. Compared to the previous version, FG-CLIP 2 supports denser visual feature
+                 output and achieves strong bilingual semantic alignment and fine-grained perception capabilities.
+          </p>
+         </div>
+
+          <div style="text-align: center;">
+            <img id="teaser" src="images/feamap.png" width="60%"/>
+          </div>
+          <br>
+           <div class="columns is-centered has-text-centered">
+            <div class="column is-six-fifths">
+              <h2 class="title is-6">
+                Visualization of FG-CLIP 2's dense feature maps and semantic alignment capability in bilingual scenarios.
+              </h2>
+            </div>
+          </div>
+        </div>
+       </div>
+      </div>
+     </section>
+<section class="section" style="margin-top: -1rem">
+  <!-- Results. -->
+  <div class="columns is-centered has-text-centered">
+    <div class="column is-six-fifths">
+      <h2 class="title is-3">
+        <img id="painting_icon" src="https://cdn-icons-png.flaticon.com/512/3515/3515174.png" width="3%"/>
+        Chinese Data Benchmark
+      </h2>
+    </div>
+  </div>
+
+  <div class="container is-max-desktop">
+    <!-- LIT-CN -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-4">
+          <img id="painting_icon" src="https://cdn-icons-png.flaticon.com/512/1698/1698535.png" width="4%"/>
+          <span style="font-size: 100%;">LIT-CN:</span>
+          A large-scale Chinese long-caption dataset for image-text retrieval
+        </h2>
+        <div class="content has-text-justified">
+          <p>
+            LIT-CN comprises 15,000 images from AI-Challenger Caption, 3,230 from MUGE, and 20,000 curated web images.
+            All images are uniformly re-captioned using Qwen2.5-VL-32B-Instruct-AWQ, prompted to generate rich,
+            context-aware descriptions with an average length of 131 tokens. Images below 256×256 resolution are filtered,
+            yielding 33,010 high-quality image-text pairs.
+            <br>
+            <br>
+            <u>LIT-CN dataset</u>: <a href="https://huggingface.co/datasets/qihoo360/LIT-CN" target="_blank" class="highlighted-link">https://huggingface.co/datasets/qihoo360/LIT-CN</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DCI-CN -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-4">
+          <img id="painting_icon" src="https://cdn-icons-png.flaticon.com/512/2598/2598643.png" width="3%"/>
+          <span style="font-size: 100%;">DCI-CN:</span>
+          Chinese translation of the Densely Captioned Images (DCI) dataset
+        </h2>
+        <div class="content has-text-justified">
+          <p>
+            DCI-CN is derived from the English Densely Captioned Images (DCI) dataset. Captions are translated into Chinese
+            using the LMM and validated by native speakers to ensure linguistic fluency
+            and semantic fidelity to the original content.
+            <br>
+            <br>
+            <u>DCI-CN dataset</u>: <a href="https://huggingface.co/datasets/qihoo360/DCI-CN" target="_blank" class="highlighted-link">https://huggingface.co/datasets/qihoo360/DCI-CN</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOCCI-CN -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-4">
+          <img id="painting_icon" src="https://cdn-icons-png.flaticon.com/512/1006/1006771.png" width="3%"/>
+          <span style="font-size: 100%;">DOCCI-CN:</span>
+          Chinese version of the DOCCI dataset
+        </h2>
+        <div class="content has-text-justified">
+          <p>
+            DOCCI-CN is constructed from the original DOCCI dataset using the same translation and human validation pipeline
+            as DCI-CN, ensuring consistent quality and cross-dataset comparability.
+          <!-- </b> -->
+            <br>
+            <br>
+            <u>DOCCI-CN dataset</u>: <a href="https://huggingface.co/datasets/qihoo360/DOCCI-CN" target="_blank" class="highlighted-link">https://huggingface.co/datasets/qihoo360/DOCCI-CN</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BoxClass-CN -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-4">
+          <img id="painting_icon" src="https://scienceqa.github.io/img/logo.png" width="3%"/>
+          <span style="font-size: 100%;">BoxClass-CN:</span>
+          Chinese region-text alignment benchmark
+        </h2>
+        <div class="content has-text-justified">
+          <p>
+            BoxClass-CN is a region classification dataset that evaluates the alignment between image regions and their
+            corresponding Chinese textual descriptions. It provides fine-grained, region-level supervision and serves as
+            a dedicated benchmark for assessing models’ ability to understand localized visual semantics in Chinese.
+            <br>
+            <br>
+            <u>BoxClass-CN dataset</u>: <a href="https://huggingface.co/datasets/qihoo360/BoxClass-CN" target="_blank" class="highlighted-link">https://huggingface.co/datasets/qihoo360/BoxClass-CN</a>
+          </p>
+        </div>
+
+    <div style="text-align: center;">
+      <img id="teaser" src="images/boxclass-cn.png" width="70%"/>
+    </div>
+    <br>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-six-fifths">
+        <h2 class="title is-6">
+          Examples of the BoxClass-CN Dataset
+        </h2>
+      </div>
+    </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+
+
+ <!--<section class="section">
+  <div class="columns is-centered has-text-centered">
+      <div class="column is-six-fifths">
+       <h2 class="title is-3">
+        Examples on Visual LIT-CN Dataset
+       </h2>
+      </div>
+     </div>
+     <centering>
+      <div style="text-align: center;">
+       <img id="teaser" src="images/lit-cn.png" width="70%"/>
+      </div>
+    </centering>
+  </section>-->
+   <!-- <div class="container mt-5">
+    
+    <div class="form-row" style="justify-content: flex-end;">
+     <div class="form-group col-md-1">
+      <div class="col-md-2" style="width: 100%">
+       <label>
+       </label>
+      </div>
+      <div aria-label="Left and Right Controller" class="btn-group" role="group" style="width: 100%;align-items: flex-end;justify-content: center;flex-direction: row;display: flex;">
+       <button class="form-control btn btn-primary" id="prev-question" type="button">
+        <i class="material-icons">
+         keyboard_arrow_left
+        </i>
+       </button>
+       <button class="form-control btn btn-primary" id="next-question" type="button">
+        <i class="material-icons">
+         keyboard_arrow_right
+        </i>
+       </button>
+      </div>
+     </div>
+    </div>-->
+    <!-- Question Card -->
+    <!--<div style="display: flex; justify-content: center; align-items: center;">
+     <div class="card mb-4" style="width: 100%; display: flex; align-items: center;">
+      
+      <div class="card-body" id="selected-question" style="display: flex; height: 80vh;">
+       <div class="chat-history">
+       
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>-->
+   <!--</section>-->
+  <section class="section" id="BibTeX">
+   <div class="container is-max-desktop content">
+    <h2 class="title">
+     BibTeX
+    </h2>
+    <pre><code>
+  @article{xie2025fg2,
+    author={Xie, Chunyu and Wang, Bin and Kong, Fanjing and Li, Jincheng and Liang, Dawei and Ao, Ji and Leng, Dawei and Yin, Yuhui},
+    title={FG-CLIP 2: A Bilingual Fine-grained Vision-language Alignment Model}, 
+    publisher={arXiv:2510.10921},
+    year={2025},
+  }
+
+  @inproceedings{xie2025fg,
+    title={FG-CLIP: Fine-Grained Visual and Textual Alignment},
+    author={Xie, Chunyu and Wang, Bin and Kong, Fanjing and Li, Jincheng and Liang, Dawei and Zhang, Gengshen and Leng, Dawei and Yin, Yuhui},
+    booktitle={ICML},
+    year={2025}
+  }
+  </code></pre>
+   </div>
+  </section>
+  <!-- <section class="section" id="Acknowledgement">
+   <div class="container is-max-desktop content">
+    <h2 class="title">
+     Acknowledgement
+    </h2>
+    <p>
+     This website is adapted from
+     <a href="https://github.com/nerfies/nerfies.github.io">
+      Nerfies
+     </a>
+     , licensed under a
+     <a href="http://creativecommons.org/licenses/by-sa/4.0/" rel="license">
+      Creative
+        Commons Attribution-ShareAlike 4.0 International License
+     </a>
+     .  We thank the LLaMA team for giving us access to their models, and open-source projects, including Alpaca and Vicuna.
+    </p>
+    <p>
+     <b>
+      Usage and License Notices
+     </b>
+     : The data, code and checkpoint is intended and licensed for research use only. They are also restricted to uses that follow the license agreement of CLIP,  LLaMA, Vicuna and GPT-4. The dataset is CC BY NC 4.0 (allowing only non-commercial use) and models trained using the dataset should not be used outside of research purposes.
+    </p>
+    <p>
+     <a href="https://github.com/Computer-Vision-in-the-Wild/">
+      <img id="painting_icon" src="https://avatars.githubusercontent.com/u/97258247?s=200&amp;v=4" width="10%"/>
+     </a>
+     Related Links:
+     <a href="https://react-vl.github.io/">
+      [REACT]
+     </a>
+     <a href="https://gligen.github.io/">
+      [GLIGEN]
+     </a>
+     <a href="https://github.com/Computer-Vision-in-the-Wild/">
+      [Computer Vision in the Wild (CVinW)]
+     </a>
+     <a href="https://instruction-tuning-with-gpt-4.github.io/">
+      [Insutrction Tuning with GPT-4]
+     </a>
+    </p>
+   </div>
+  </section> -->
+  <!--<script>
+   // Handle message showing
+    function createChatRow(sender, text, imageSrc) {
+      var article = document.createElement("article");
+      article.className = "media"
+
+      var figure = document.createElement("figure");
+      figure.className = "media-left";
+
+      var span = document.createElement("span");
+      span.className = "icon is-large";
+
+      var icon = document.createElement("i");
+      icon.className = "fas fas fa-2x" + (sender === "User" ? " fa-user " : sender === "LLaVA" ? " fa-robot" : "");
+
+      var media = document.createElement("div");
+      media.className = "media-content";
+
+      var content = document.createElement("div");
+      content.className = "content";
+
+      var para = document.createElement("p");
+
+      // wrap text in pre tag to preserve whitespace and line breaks
+      var pre_text = document.createElement("pre");
+      pre_text.style = "background-color: white; font-size: 18px; font-family: Arial; padding: 0; margin: 0; white-space: pre-wrap; word-wrap: break-word;";
+      var paraText = document.createTextNode(text);
+      pre_text.appendChild(paraText);
+
+      var strong = document.createElement("strong");
+      strong.innerHTML = sender;
+      var br = document.createElement("br");
+
+      para.appendChild(strong);
+      para.appendChild(br);
+      para.appendChild(pre_text);
+
+      // Add image if imageSrc is provided
+      if (imageSrc) {
+        var img = document.createElement("img");
+        img.src = imageSrc;
+        img.style = "max-width: 100%; max-height: 300px;"; // Adjust the style as needed
+        para.appendChild(img);
+      }
+
+      content.appendChild(para);
+      media.appendChild(content);
+      span.appendChild(icon);
+      figure.appendChild(span);
+      if (sender !== "Description") {
+        article.appendChild(figure);
+      };
+      article.appendChild(media);
+      return article;
+    }
+
+    function addMessageToChatHistory(sender, message, imageSrc) {
+      const chatHistory = document.querySelector('.chat-history');
+      const chatRow = createChatRow(sender, message, imageSrc);
+      chatHistory.appendChild(chatRow);
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
+    function clearChatHistory() {
+      const chatHistory = document.querySelector('.chat-history');
+      chatHistory.innerHTML = "";
+    }
+
+   
+
+    // Initialize the displayed image
+    update_dialog_demo();
+
+    // Event listeners for the buttons
+    document.getElementById('prev-question').addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + conversations.length) % conversations.length;
+      update_dialog_demo();
+    });
+
+    document.getElementById('next-question').addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % conversations.length;
+      update_dialog_demo();
+    });
+  </script>-->
+ </body>
+</html>
