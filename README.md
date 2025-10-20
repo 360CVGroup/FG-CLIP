@@ -198,6 +198,20 @@ import matplotlib
 matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 
+def resize_short_edge(image, target_size=2048):
+    if isinstance(image, str):
+        image = Image.open(image)
+    width, height = image.size
+    short_edge = min(width, height)
+
+    if short_edge >= target_size:
+        return image
+    scale = target_size / short_edge
+    new_width = int(width * scale)
+    new_height = int(height * scale)
+    resized_image = image.resize((new_width, new_height))
+    return resized_image
+
 
 img_root = "cat_dfclor.jpg"
 image = Image.open(img_root).convert("RGB")
