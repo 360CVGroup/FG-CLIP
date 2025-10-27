@@ -64,7 +64,6 @@ basename="fgclip2-base-patch16/"
 #     --walk_type box \
 
 
-
 # S EVAL LVIS-BOXCLS
 # lvis_box_ann="lvis/lvis_v1_val.json"
 # torchrun --master_port=8888 --nproc_per_node 8 -m fgclip2.eval.in1k.lvis_box_cls_ddp \
@@ -83,7 +82,18 @@ basename="fgclip2-base-patch16/"
 #     --max_length 64 \
 #     --ann_file $bcn_box_ann \
 #     --walk_type box \
-    
+
+
+# S EVAL FGOVD
+# fg_ovd_ann="1_attributes_llava.jsonl" 
+# python -m fgclip2.eval.fgovd_bbox_roi \
+#     --model-path $INIT_MODEL_PATH/$basename \
+#     --model-base $INIT_MODEL_PATH/$basename \
+#     --max_length 64 \
+#     --ann_file $fg_ovd_ann \
+#     --image-folder data/coco \
+#     --walk_type box \
+
 
 # S EVAL ShareGPT4V
 # ShareGPT4V_ann="share-captioner_coco_lcs_sam_1246k_1107.json"
