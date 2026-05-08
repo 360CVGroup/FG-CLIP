@@ -12,6 +12,7 @@ Across 29 datasets and 8 diverse tasks, it consistently surpasses recent strong 
 Chunyu Xie*, Bin Wang*, Fanjing Kong, Jincheng Li, Dawei Liang, Ji Ao, Dawei Leng†, Yuhui Yin (*Equal Contribution, ✝Corresponding Author)
 </br>
 [![arXiv](https://img.shields.io/badge/arXiv-2510.10921-b31b1b.svg)](https://arxiv.org/abs/2510.10921)
+[![ICML](https://img.shields.io/badge/ICML-2026-blue.svg)](https://icml.cc/Conferences/2026)
 [![HF-model](https://img.shields.io/badge/Model-Collection🤗-yellow.svg)](https://huggingface.co/collections/qihoo360/fg-clip-2-68ecbf9c548623bb78bc7913)
 [![HF-data](https://img.shields.io/badge/Benchmark-Collection🤗-yellow.svg)](https://huggingface.co/collections/qihoo360/fg-clip-2-68ecbf9c548623bb78bc7913)
 [![API+MCP](https://img.shields.io/badge/API/MCP-FG--CLIPv2-green.svg)](https://research.360.cn/sass/index)
@@ -31,6 +32,7 @@ Chunyu Xie*, Bin Wang*, Fanjing Kong, Jincheng Li, Dawei Liang, Gengshen Zhang, 
 </p>
 
 ## 🔥 News
+- 🚀 **[2025/05/02]** FG-CLIP 2 has been accepted by ICML'26.
 - 🚀 **[2025/10/14]** We have uploaded the FG-CLIP 2 code and models.
 - 🚀 **[2025/10/14]** We released the paper of [FG-CLIP 2: A Bilingual Fine-grained Vision-language Alignment Model](https://arxiv.org/abs/2510.10921).
 - 🚀 **[2025/09/29]** We just open-sourced MCP server implementation for FG-CLIP, check [FGCLIP-MCP](https://github.com/360CVGroup/FGCLIP-MCP) for details.
